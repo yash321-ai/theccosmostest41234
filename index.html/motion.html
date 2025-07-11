@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motion Test class-9th</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e3a8a, #a5b4fc);
+            font-family: 'Inter', sans-serif;
+        }
+        .quiz-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .stopwatch-container {
+            background: #e0e7ff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            display: inline-block;
+        }
+        .stopwatch {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1e3a8a;
+        }
+        .question {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .option {
+            background: #e0e7ff;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .option:hover {
+            background: #c7d2fe;
+        }
+        .option.selected {
+            background: #4f46e5;
+            color: white;
+        }
+        .btn {
+            background: #4f46e5;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #4338ca;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center">
+    <div class="quiz-container">
+        <div class="header">
+            <h1 class="text-3xl font-bold text-indigo-900">Motion Quiz - Class 9</h1>
+            <div class="stopwatch-container">
+                <div class="stopwatch" id="stopwatch">00:00:00</div>
+            </div>
+        </div>
+        <div id="quiz">
+            <div class="question" id="question"></div>
+            <div id="options" class="space-y-2"></div>
+        </div>
+        <div class="flex justify-between mt-6">
+            <button id="prevBtn" class="btn" onclick="prevQuestion()">Previous</button>
+            <button id="nextBtn" class="btn" onclick="nextQuestion()">Next</button>
+        </div>
+        <div id="result" class="mt-6 hidden">
+            <h2 class="text-2xl font-bold text-indigo-900">Quiz Completed!</h2>
+            <p id="score" class="text-lg"></p>
+            <button class="btn mt-4" onclick="restartQuiz()">Restart Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { question: "What is the SI unit of speed?", options: ["m/s", "km/h", "m/min", "cm/s"], answer: "m/s" },
+            { question: "Which quantity is a vector?", options: ["Speed", "Distance", "Velocity", "Time"], answer: "Velocity" },
+            { question: "What is the formula for average speed?", options: ["Total distance / Total time", "Total time / Total distance", "Distance × Time", "None"], answer: "Total distance / Total time" },
+            { question: "If an object covers 100 m in 10 s, what is its speed?", options: ["10 m/s", "100 m/s", "1 m/s", "1000 m/s"], answer: "10 m/s" },
+            { question: "What does a horizontal line on a distance-time graph indicate?", options: ["Constant speed", "Stationary object", "Acceleration", "Deceleration"], answer: "Stationary object" },
+            { question: "Which equation represents the first equation of motion?", options: ["v = u + at", "s = ut + ½at²", "v² = u² + 2as", "s = vt"], answer: "v = u + at" },
+            { question: "What is acceleration?", options: ["Change in speed", "Change in velocity per unit time", "Change in distance", "Change in time"], answer: "Change in velocity per unit time" },
+            { question: "The SI unit of acceleration is:", options: ["m/s", "m/s²", "m²/s", "s/m"], answer: "m/s²" },
+            { question: "What is the slope of a velocity-time graph?", options: ["Speed", "Distance", "Acceleration", "Time"], answer: "Acceleration" },
+            { question: "If an object is moving with constant velocity, its acceleration is:", options: ["Zero", "Positive", "Negative", "Infinite"], answer: "Zero" },
+            { question: "Which of the following is a scalar quantity?", options: ["Velocity", "Acceleration", "Displacement", "Distance"], answer: "Distance" },
+            { question: "What is the second equation of motion?", options: ["v = u + at", "s = ut + ½at²", "v² = u² + 2as", "s = vt"], answer: "s = ut + ½at²" },
+            { question: "A car accelerates from 10 m/s to 20 m/s in 5 s. What is its acceleration?", options: ["2 m/s²", "4 m/s²", "1 m/s", "5 m/s²"], answer: "2 m/s²" },
+            { question: "What does the area under a velocity-time graph represent?", options: ["Speed", "Distance", "Acceleration", "Time"], answer: "Distance" },
+            { question: "If an object is thrown vertically upwards, its velocity at the highest point is:", options: ["Maximum", "Zero", "Negative", "Positive"], answer: "Zero" },
+            { question: "What is the third equation of motion?", options: ["v = u + at", "s = ut + ½at²", "v² = u² + 2as", "s = vt"], answer: "v² = u² + 2as" },
+            { question: "A body moving with uniform speed has:", options: ["Constant acceleration", "Zero acceleration", "Variable acceleration", "Negative acceleration"], answer: "Zero acceleration" },
+            { question: "Which graph represents uniform motion?", options: ["Curved distance-time graph", "Straight distance-time graph", "Parabolic velocity-time graph", "None"], answer: "Straight distance-time graph" },
+            { question: "What is the unit of displacement?", options: ["Meter", "Second", "Meter/second", "Meter/second²"], answer: "Meter" },
+            { question: "If a car travels 200 m in 20 s, what is its average speed?", options: ["10 m/s", "20 m/s", "5 m/s", "40 m/s"], answer: "10 m/s" },
+            { question: "What is retardation?", options: ["Positive acceleration", "Negative acceleration", "Zero acceleration", "Constant speed"], answer: "Negative acceleration" },
+            { question: "The slope of a distance-time graph gives:", options: ["Acceleration", "Speed", "Distance", "Time"], answer: "Speed" },
+            { question: "A ball is dropped from a height. Its acceleration is:", options: ["Zero", "9.8 m/s²", "Variable", "Negative"], answer: "9.8 m/s²" },
+            { question: "What is uniform motion?", options: ["Motion with changing speed", "Motion with constant speed", "Motion with acceleration", "None"], answer: "Motion with constant speed" },
+            { question: "If an object’s velocity changes from 20 m/s to 10 m/s in 2 s, what is its acceleration?", options: ["-5 m/s²", "5 m/s²", "-10 m/s²", "10 m/s²"], answer: "Negative" },
+            { question: "Which quantity has both magnitude and direction?", options: ["Speed", "Distance", "Velocity", "Time"], answer: "Velocity" },
+            { question: "What is the formula for distance in uniform motion?", options: ["s = ut", "s = ut + ½at²", "v = u + at", "v² = u² + 2as"], answer: "s = ut" },
+            { question: "A train travels 360 km in 3 hours. Its speed in m/s is:", options: ["33.33 m/s", "100 m/s", "120 m/s", "10 m/s"], answer: "33.33 m/s" },
+            { question: "What is the acceleration due to gravity on Earth?", options: ["9.8 m/s", "9.8 m/s²", "98 m/s²", "0.98 m/s²"], answer: "9.8 m/s²" },
+            { question: "If an object moves in a straight line with constant speed, it is called:", options: ["Uniform motion", "Non-uniform motion", "Circular motion", "None"], answer: "Uniform motion" },
+            { question: "What is the unit of velocity?", options: ["m/s", "m/s²", "m", "s"], answer: "m/s" },
+            { question: "A car stops in 5 s from a speed of 25 m/s. Its acceleration is:", options: ["-5 m/s²", "5 m/s²", "-25 m/s²", "25 m/s²"], answer: "None" },
+            { question: "What does a curved line on a distance-time graph indicate?", options: ["Uniform motion", "Non-uniform motion", "Stationary object", "None"], answer: "Non-uniform motion" },
+            { question: "The formula v² = u² + 2as is used to find:", options: ["Distance", "Velocity", "Acceleration", "Time"], answer: "Velocity" },
+            { question: "What is the displacement of an object moving in a circle after one complete round?", options: ["Zero", "Equal to circumference", "Infinite", "Negative"], answer: "Zero" },
+            { question: "A body falls freely under gravity. Its speed:", options: ["Increases", "Decreases", "Remains constant", "Becomes zero"], answer: "Increases" },
+            { question: "What is the relation between speed, distance, and time?", options: ["Speed = Distance / Time", "Speed = Time / Distance", "Speed = Distance × Time"], answer: "Speed = Distance / Time" },
+            { question: "A car moves 50 m in 5 s, then 100 m in 5 s. Its average speed is:", options: ["15 m/s", "10 m/s", "20 m/s", "25 m/s"], answer: "15 m/s" },
+            { question: "What is non-uniform motion?", options: ["Motion with constant speed", "Motion with changing speed", "Motion with zero speed", "None"], answer: "Motion with changing speed" },
+            { question: "The area under a speed-time graph gives:", options: ["Acceleration", "Distance", "Velocity", "Time"], answer: "Distance" },
+            { question: "If an object’s speed increases from 0 to 10 m/s in 2 s, its acceleration is:", options: ["5 m/s²", "10 m/s²", "2 m/s²", "0 m/s²"], answer: "5 m/s²" },
+            { question: "What is the unit of time in SI system?", options: ["Second", "Minute", "Hour", "Day"], answer: "Second" },
+            { question: "A cyclist covers 20 km in 2 hours. His speed in m/s is:", options: ["2.78 m/s", "10 m/s", "5 m/s", "20 m/s"], answer: "2.78 m/s" },
+            { question: "What is the formula for acceleration?", options: ["a = (v - u) / t", "a = v / t", "a = u / t", "a = v² / t"], answer: "a = (v - u) / t" },
+            { question: "If an object is at rest, its velocity is:", options: ["Zero", "Positive", "Negative", "Infinite"], answer: "Zero" },
+            { question: "What is the displacement of an object if it returns to its starting point?", options: ["Zero", "Positive", "Negative", "Infinite"], answer: "Zero" },
+            { question: "A train accelerates from 20 m/s to 40 m/s in 10 s. Its acceleration is:", options: ["2 m/s²", "4 m/s²", "1 m/s²", "3 m/s²"], answer: "2 m/s²" },
+            { question: "What does a straight line on a velocity-time graph indicate?", options: ["Constant velocity", "Constant acceleration", "Zero velocity", "None"], answer: "Constant acceleration" },
+            { question: "If an object moves 100 m in 10 s, then stops for 5 s, its average speed is:", options: ["6.67 m/s", "10 m/s", "5 m/s", "20 m/s"], answer: "6.67 m/s" },
+            { question: "What is the unit of force in relation to motion?", options: ["Newton", "Joule", "Watt", "Pascal"], answer: "Newton" }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answers = new Array(questions.length).fill(null);
+        let time = 0;
+        let timer;
+
+        function startTimer() {
+            timer = setInterval(() => {
+                time++;
+                let hours = Math.floor(time / 3600);
+                let minutes = Math.floor((time % 3600) / 60);
+                let seconds = time % 60;
+                document.getElementById('stopwatch').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('question').textContent = `${currentQuestion + 1}. ${q.question}`;
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            q.options.forEach((option, index) => {
+                const div = document.createElement('div');
+                div.className = `option ${answers[currentQuestion] === option ? 'selected' : ''}`;
+                div.textContent = option;
+                div.onclick = () => selectOption(option);
+                optionsDiv.appendChild(div);
+            });
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'Submit' : 'Next';
+        }
+
+        function selectOption(option) {
+            answers[currentQuestion] = option;
+            loadQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                submitQuiz();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            stopTimer();
+            score = answers.reduce((sum, answer, index) => 
+                sum + (answer === questions[index].answer ? 1 : 0), 0);
+            document.getElementById('quiz').classList.add('hidden');
+            document.getElementById('prevBtn').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('result').classList.remove('hidden');
+            document.getElementById('score').textContent = `You scored ${score} out of ${questions.length}! Time taken: ${document.getElementById('stopwatch').textContent}`;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answers.fill(null);
+            time = 0;
+            document.getElementById('quiz').classList.remove('hidden');
+            document.getElementById('prevBtn').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('stopwatch').textContent = '00:00:00';
+            startTimer();
+            loadQuestion();
+        }
+
+        startTimer();
+        loadQuestion();
+    </script>
+</body>
+</html>

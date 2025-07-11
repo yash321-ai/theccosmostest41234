@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Cosmos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000; 
+            color: #e5e7eb;
+            position: relative;
+            overflow-x: hidden;
+        }
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+        }
+        .starfield {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="white" opacity="0.2"/></svg>') repeat;
+            animation: twinkle 8s infinite;
+            z-index: -1;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.5; }
+        }
+        .article-card {
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #3b82f6;
+        }
+        .article-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.6);
+        }
+        nav {
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(8px);
+        }
+        nav a {
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        nav a:hover {
+            color: #60a5fa;
+            transform: translateY(-3px);
+            text-shadow: 0 0 10px rgba(96, 165, 250, 0.8);
+        }
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .hamburger div {
+            background-color: #60a5fa;
+            transition: all 0.3s ease;
+        }
+        .hamburger.active div:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active div:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active div:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+        @media (max-width: 640px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+                display: none;
+                width: 100%;
+                padding: 1rem;
+                background: rgba(10, 10, 10, 0.9);
+                position: absolute;
+                top: 64px;
+                left: 0;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .hamburger {
+                display: block;
+            }
+        }
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            margin: 5px 0;
+        }
+        .glow {
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.7);
+        }
+        .btn-glow {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            transition: all 0.3s ease;
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.8);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="starfield"></div>
+    <!-- Navigation Bar -->
+    <nav class="p-4 sticky top-0 z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-3xl font-bold text-blue-400 glow">The Cosmos</div>
+            <div class="hamburger md:hidden" onclick="toggleMenu()">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div class="nav-links space-x-6 md:flex">
+                <a href="#" class="text-gray-300 hover:text-blue-400">Home</a>
+                <a href="#" class="text-gray-300 hover:text-blue-400">Missions</a>
+                <a href="#" class="text-gray-300 hover:text-blue-400">About</a>
+                <a href="#" class="text-gray-300 hover:text-blue-400">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-black to-blue-950 h-96 flex items-center justify-center text-center">
+        <div>
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-4 glow">The Cosmos Test </h1>
+            <p class="text-xl md:text-2xl text-gray-300">Embark on a journey through the endless pyqs and questions</p>
+        </div>
+    </section>
+
+    <!-- Article Card Section -->
+    <section class="container mx-auto py-12">
+        <h2 class="text-4xl font-bold text-center text-blue-300 mb-8 glow">Rescent Test</h2>
+        <div class="max-w-2xl mx-auto">
+            <div class="article-card p-6 rounded-lg flex flex-col items-center">
+                <img src="https://via.placeholder.com/600x300?text=Space+Quiz" alt="Space Quiz" class="w-full h-48 object-cover rounded-md mb-4">
+                <h3 class="text-2xl font-semibold text-blue-300 mb-2 glow">MOTION CLASS-9</h3>
+                <p class="text-gray-300 mb-4 text-center"></p>
+                <a href="motion.html" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded btn-glow">Take Test</a>
+            </div>
+        </div>
+<div class="max-w-2xl mx-auto">
+            <div class="article-card p-6 rounded-lg flex flex-col items-center">
+                <img src="https://via.placeholder.com/600x300?text=Space+Quiz" alt="Space Quiz" class="w-full h-48 object-cover rounded-md mb-4">
+                <h3 class="text-2xl font-semibold text-blue-300 mb-2 glow">Trigonometry Class-9th</h3>
+                <p class="text-gray-300 mb-4 text-center"></p>
+                <a href="trig.Html" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded btn-glow">Take Test</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black bg-opacity-90 p-6 text-center">
+        <p class="text-gray-300">© the cosmos All rights reserved.</p>
+        <div class="mt-2">
+            <a href="#" class="text-blue-400 hover:underline mx-2">Privacy Policy</a>
+            <a href="#" class="text-blue-400 hover:underline mx-2">Terms of Service</a>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            const hamburger = document.querySelector('.hamburger');
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
